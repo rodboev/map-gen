@@ -19,7 +19,7 @@ function addTilesLayer(map) {
   new L.TileLayer(
     `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${apiKey}`,
     {
-      maxZoom: 18,
+      maxZoom: 13,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
       id: 'mapbox/streets-v11',
       tileSize: 512,
@@ -30,7 +30,6 @@ function addTilesLayer(map) {
 
 async function addOverlay(map) {
   const geojson = await axios.get('/data/nyc-zip-code-tabulation-areas-polygons.geojson');
-  console.log(typeof geojson)
   L.geoJSON(geojson.data, {
     style: setFeatureStyle,
     onEachFeature: onEachFeature
@@ -39,7 +38,6 @@ async function addOverlay(map) {
 
 const TileLayer = () => {
   const map = useMap();
-
   useEffect(() => {
     addTilesLayer(map);
     addOverlay(map);
@@ -53,7 +51,7 @@ function App() {
     <div id="mapid">
       <MapContainer center={[40.705, -73.978]} zoom={10}>
         <TileLayer />
-          <SearchField apiKey={apiKey} />
+        <SearchField apiKey={apiKey} />
       </MapContainer>
     </div>
   );
@@ -68,10 +66,9 @@ function onEachFeature(feature, layer) {
 
   /*
   layer.on('click', () => {
-    const map = useMap();
     const lat = parseFloat(feature.properties.latitude);
     const lng = parseFloat(feature.properties.longitude)
-
+  
     console.log(`Panning to ${typeof lat} ${lat}, ${typeof lng} ${lng}`)
     map.setView([lat, lng], 13);
   });
