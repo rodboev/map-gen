@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "axios": "^0.21.1",
+    "axios-cache-adapter": "^2.7.3",
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "public/*"
+    ]
+  }
+}
