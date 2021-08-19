@@ -6,8 +6,7 @@ const geosearch = async (query) => {
   try {
     const result = await provider.search({query: String(query) });
     if (result.length > 0) {
-      const {x: lat, y: lng} = result[0];
-      return [lat, lng];
+      return [result[0].y, result[0].x];
     }
   }
   catch (err) {

@@ -2,6 +2,7 @@ import { useState, useEffect, useReducer } from "react";
 import api from 'axios';
 import { v4 as id } from 'uuid';
 import { geosearch, formatPhoneNumber } from '../lib/utils';
+import { Marker, Popup, Tooltip } from "react-leaflet";
 
 const leadReducer = (state, action) => {
   if (action.type === 'ADD_LEAD') {
@@ -10,7 +11,7 @@ const leadReducer = (state, action) => {
   if (action.type === 'UPDATE_LEAD') {
     const idx = state.findIndex(item => item.id === action.id);
     const lead = {...state[idx]};
-    lead.latlng = action.latlng;
+    lead.position = action.position;
     const leads = [...state];
     leads.splice(idx, 1, lead);
     return leads;
@@ -29,22 +30,23 @@ const Leads = () => {
     (async () => {
       const response = await api.get('https://lead-gen-lite.herokuapp.com/api/all-with-contacts.json');
       
-      response.data.slice(0, 5).forEach(lead => {
-        const address1 = lead.address;
-        const address2 = [
-          [lead.city, lead.state].filter(Boolean).join(', '),
-          lead.zip
-        ].join(' ');
+      response.data.slice(0, 10).forEach(lead => {
         const phone = formatPhoneNumber(lead.phone);
 
         dispatch({
           type: 'ADD_LEAD',
           payload: {
             id: id(),
-            address1,
-            address2,
+            company: lead.company,
+            name: [lead.first_name, lead.last_name].join(' '),
+            address1: lead.address,
+            address2:
+              [
+                [lead.city, lead.state].filter(Boolean).join(', '),
+                lead.zip
+              ].filter(Boolean).join(' '),
             phone,
-            latlng: [],
+            position: [],
             loading: false,
           }
         });
@@ -53,13 +55,12 @@ const Leads = () => {
   }, []);
 
   useEffect(() => {
-    // Update latlng when lead shows up
+    // Update position when lead shows up
     (async () => {
-      const leadsToUpdate = leads.filter(lead => lead.latlng && lead.latlng.length === 0 && !lead.loading)
+      const leadsToUpdate = leads.filter(lead => lead.position && lead.position.length === 0 && !lead.loading)
 
       leadsToUpdate.forEach(async (lead) => {
-        console.log('fetching latlng');
-        const loadLatLng = async () => {
+        const queueGeosearch = async () => {
           const query = [lead.address1, lead.address2].join(' ');
           lead.loading = true;
           const result = await geosearch(query)
@@ -70,7 +71,7 @@ const Leads = () => {
         dispatch({
           type: 'UPDATE_LEAD',
           id: lead.id,
-          latlng: await loadLatLng(),
+          position: await queueGeosearch(),
         });
       });
     })();
@@ -78,7 +79,24 @@ const Leads = () => {
 
   const listAddresses = () => {
     return leads.map(lead =>
-      <p>{lead.address1}<br />{lead.address2}<br />{lead.phone}<br />[{lead.latlng}]</p>);
+      lead.position && lead.position.length > 0 &&
+        <Marker position={lead.position}>
+          <Popup>
+            <div>{lead.company}</div>
+            <div>{lead.name}</div>
+            <div>{lead.address1}</div>
+            <div>{lead.address2}</div>
+            <div>{lead.phone}</div>
+          </Popup>
+          <Tooltip>
+            <div>{lead.company}</div>
+            <div>{lead.name}</div>
+            <div>{lead.address1}</div>
+            <div>{lead.address2}</div>
+            <div>{lead.phone}</div>
+          </Tooltip>
+        </Marker>
+    )
   };
 
   return (

@@ -6,7 +6,6 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 import './App.css';
 
-import SearchField from './components/SearchField';
 import TileLayer from './components/TileLayer';
 import ZipcodeLayer from './components/ZipcodeLayer';
 import Leads from './components/Leads';
@@ -17,13 +16,12 @@ function App() {
   return (
     <>
       <div id="mapid">
-        <MapContainer center={[40.705, -73.978]} zoom={10}>
+        <MapContainer center={[40.705, -73.978]} zoom={10} zoomControl={false}>
           <TileLayer apiKey={apiKey} />
           <ZipcodeLayer />
-          <SearchField apiKey={apiKey} />
+          <Leads />
         </MapContainer>
       </div>
-      <Leads />
     </>
   );
 }

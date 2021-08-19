@@ -16,16 +16,17 @@ const ZipcodeLayer = ({ setLocation, setZoom }) => {
   });
 
   const onEachFeature = (feature, layer) => {
-    let popupContent = 'You clicked on:<br />';
+    let popupContent = '';
     if (feature.properties) {
       popupContent += `${feature.properties['PO_NAME']}, ${feature.properties['STATE']} ${feature.properties['postalCode']}`;
     }
     layer.bindPopup(popupContent);
+    layer.bindTooltip(`${feature.properties['PO_NAME']}, ${feature.properties['STATE']} ${feature.properties['postalCode']}`);
   
     layer.on('click', () => {
       const lat = parseFloat(feature.properties.latitude);
       const lng = parseFloat(feature.properties.longitude);
-      map.setView([lat, lng], 13);
+      map.setView([lat, lng], 11); // 13
     });
   }
 
