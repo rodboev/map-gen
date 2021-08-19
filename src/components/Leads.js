@@ -40,11 +40,12 @@ const Leads = () => {
         dispatch({
           type: 'ADD_LEAD',
           payload: {
+            id: id(),
             address1,
             address2,
             phone,
-            latlng: '',
-            id: id()
+            latlng: [],
+            loading: false,
           }
         });
       });
@@ -54,22 +55,30 @@ const Leads = () => {
   useEffect(() => {
     // Update latlng when lead shows up
     (async () => {
-      const leadToUpdate = leads.find(lead => lead.latlng === '')
+      const leadsToUpdate = leads.filter(lead => lead.latlng && lead.latlng.length === 0 && !lead.loading)
 
-      if (leadToUpdate) {
-        const queryAddress = [leadToUpdate.address1, leadToUpdate.address2].join(' ');
+      leadsToUpdate.forEach(async (lead) => {
+        console.log('fetching latlng');
+        const loadLatLng = async () => {
+          const query = [lead.address1, lead.address2].join(' ');
+          lead.loading = true;
+          const result = await geosearch(query)
+          lead.loading = false;
+          return result;
+        }
+
         dispatch({
           type: 'UPDATE_LEAD',
-          id: leadToUpdate.id,
-          latlng: await geosearch(queryAddress),
+          id: lead.id,
+          latlng: await loadLatLng(),
         });
-      }
+      });
     })();
   }, [leads]);
 
   const listAddresses = () => {
     return leads.map(lead =>
-      <p>{lead.address1}<br />{lead.address2}<br />{lead.phone}<br />[{lead.latlng && lead.latlng.join(', ')}]</p>);
+      <p>{lead.address1}<br />{lead.address2}<br />{lead.phone}<br />[{lead.latlng}]</p>);
   };
 
   return (
