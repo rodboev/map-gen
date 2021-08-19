@@ -2,3 +2,7 @@
   width: 420px;
   height: 420px;
 }
+
+.addresses {
+  font: 10pt source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
