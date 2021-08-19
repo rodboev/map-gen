@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { GeoSearchControl, MapBoxProvider } from 'leaflet-geosearch';
 import { useMap } from 'react-leaflet';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 const SearchField = ({ apiKey }) => {
     const map = useMap();

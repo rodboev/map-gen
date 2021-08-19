@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMap, GeoJSON } from "react-leaflet";
-import axios from 'axios';
+import api, { cache } from '../lib/api';
 
 const ZipcodeLayer = ({ setLocation, setZoom }) => {
   const [data, setData] = useState(null);
@@ -31,8 +31,10 @@ const ZipcodeLayer = ({ setLocation, setZoom }) => {
 
   useEffect(() => {
     (async () => {
-      const geojson = await axios.get('/data/beta_nyc-zip-code-tabulation-areas-polygons.min.geojson');
+      const geojson = await api.get('/data/beta_nyc-zip-code-tabulation-areas-polygons.min.geojson');
       setData(geojson.data);
+      const length = await cache.store.length();
+      console.log('Cache store length:', length);
     })();
   }, []);
 
