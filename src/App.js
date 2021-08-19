@@ -1,7 +1,6 @@
 import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import 'leaflet-defaulticon-compatibility';
-import { geosearch } from './lib/utils';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
@@ -28,12 +27,5 @@ function App() {
     </>
   );
 }
-
-(async () => {
-  const address = '40-08 50th Ave 11104';
-  const result = await geosearch(address);
-  const {x: lat, y: lng} = result[0];
-  console.log(`'${address}': [${lat}, ${lng}]`);
-})();
 
 export default App;

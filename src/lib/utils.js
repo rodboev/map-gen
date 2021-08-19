@@ -3,7 +3,16 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch';
 const provider = new OpenStreetMapProvider();
 
 const geosearch = async (query) => {
-  return await provider.search({ query });
+  try {
+    const result = await provider.search({query: String(query) });
+    if (result.length > 0) {
+      const {x: lat, y: lng} = result[0];
+      return [lat, lng];
+    }
+  }
+  catch (err) {
+    return err;
+  }
 }
 
 const formatPhoneNumber = str => {

@@ -13,7 +13,8 @@ const store = localforage.createInstance({
 });
 
 const cache = setupCache({
-  maxAge: 60 * 60 * 1000,
+  // maxAge: 60 * 60 * 1000,
+  maxAge: 0,
   store
 });
 
