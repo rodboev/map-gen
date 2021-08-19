@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { GeoJSON } from "react-leaflet";
+import { useMap, GeoJSON } from "react-leaflet";
 import axios from 'axios';
 
-const ZipcodeLayer = () => {
+const ZipcodeLayer = ({ setLocation, setZoom }) => {
   const [data, setData] = useState(null);
+  const map = useMap();
 
   const setFeatureStyle = () => ({
     fillColor: 'lightblue',
@@ -21,18 +22,16 @@ const ZipcodeLayer = () => {
     }
     layer.bindPopup(popupContent);
   
-    /*
     layer.on('click', () => {
       const lat = parseFloat(feature.properties.latitude);
       const lng = parseFloat(feature.properties.longitude);
       map.setView([lat, lng], 13);
     });
-    */
   }
 
   useEffect(() => {
     (async () => {
-      const geojson = await axios.get('/data/nyc-zip-codes-rfc7946.geojson');
+      const geojson = await axios.get('/data/beta_nyc-zip-code-tabulation-areas-polygons.min.geojson');
       setData(geojson.data);
     })();
   }, []);

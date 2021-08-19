@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import 'leaflet-defaulticon-compatibility';
 
