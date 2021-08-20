@@ -22,14 +22,14 @@ const dispatchTable = {
   }
 };
 
-const leadReducer = (state, action) => {
+const reducer = (state, action) => {
   return dispatchTable[action.type]
     ? dispatchTable[action.type](state, action)
     : state;
 }
 
 const Leads = () => {
-  const [leads, dispatch] = useReducer(leadReducer, [])
+  const [leads, dispatch] = useReducer(reducer, [])
 
   useEffect(() => {
     // On load, get leads from lead-gen API
