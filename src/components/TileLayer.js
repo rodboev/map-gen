@@ -1,8 +1,9 @@
 import L from 'leaflet';
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
+import { apiKey } from '../lib/utils'
 
-const TileLayer = ({apiKey}) => {
+const TileLayer = () => {
     // Built-in <TileLayer /> doesn't properly handle zoomOffset
     const map = useMap();
     

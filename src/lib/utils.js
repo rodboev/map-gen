@@ -1,6 +1,12 @@
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { MapBoxProvider } from 'leaflet-geosearch';
 
-const provider = new OpenStreetMapProvider();
+const apiKey = 'pk.eyJ1Ijoicm9kYm9ldiIsImEiOiJja3NncXVnMzgxbXVwMnNvbTdwMTNsdzI0In0.6n8Lu9s1o4JwyPJmMcHsNg';
+
+const provider = new MapBoxProvider({
+  params: {
+    access_token: apiKey,
+  },
+});
 
 const geosearch = async (query) => {
   try {
@@ -20,4 +26,4 @@ const formatPhoneNumber = str => {
   return match ? `(${match[1]}) ${match[2]}-${match[3]}` : null;
 }
 
-export { geosearch, formatPhoneNumber };
+export { geosearch, formatPhoneNumber, apiKey };

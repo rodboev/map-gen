@@ -4,27 +4,27 @@ import { v4 as id } from 'uuid';
 import { geosearch, formatPhoneNumber } from '../lib/utils';
 import { Marker, Popup } from "react-leaflet";
 
-const dispatchTable = {
-  'ADD_LEAD': (state, action) => {
-    return [ ...state, action.payload ]
+const actionHandlers = {
+  'ADD_LEAD': (leads, action) => {
+    return [ ...leads, action.payload ]
   },
-  'UPDATE_LEAD': (state, action) => {
-    const idx = state.findIndex(item => item.id === action.payload.id);
+  'UPDATE_LEAD': (leads, action) => {
+    const i = leads.findIndex(item => item.id === action.payload.id);
     const lead = {
-      ...state[idx], position: action.payload.position
+      ...leads[i], position: action.payload.position
     };
-    const leads = [...state];
-    leads.splice(idx, 1, lead);
-    return leads;
+    const newLeads = [...leads];
+    newLeads.splice(i, 1, lead);
+    return newLeads;
   },
-  'DELETE_LEAD': (state, action) => {
-    return state.filter(lead => lead.id !== action.payload.id)
+  'DELETE_LEAD': (leads, action) => {
+    return leads.filter(lead => lead.id !== action.payload.id)
   }
 };
 
 const reducer = (state, action) => {
-  return dispatchTable[action.type]
-    ? dispatchTable[action.type](state, action)
+  return actionHandlers[action.type]
+    ? actionHandlers[action.type](state, action)
     : state;
 }
 
@@ -36,7 +36,7 @@ const Leads = () => {
     (async () => {
       const response = await api.get('https://lead-gen-lite.herokuapp.com/api/all-with-contacts.json');
       
-      response.data.slice(0, 10).forEach(lead => {
+      response.data.slice(0, 100).forEach(lead => {
         const phone = formatPhoneNumber(lead.phone);
 
         dispatch({
