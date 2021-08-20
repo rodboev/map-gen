@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useMap, GeoJSON } from "react-leaflet";
 import api, { cache } from '../lib/api';
 
+const zoomTo = 12;
+
 const ZipcodeLayer = ({ setLocation, setZoom }) => {
   const [data, setData] = useState(null);
   const map = useMap();
@@ -12,7 +14,7 @@ const ZipcodeLayer = ({ setLocation, setZoom }) => {
     opacity: 1,
     color: 'white',
     dashArray: '3',
-    fillOpacity: 0.7
+    fillOpacity: 0.6
   });
 
   const onEachFeature = (feature, layer) => {
@@ -25,7 +27,7 @@ const ZipcodeLayer = ({ setLocation, setZoom }) => {
     layer.on('click', () => {
       const lat = parseFloat(feature.properties.latitude);
       const lng = parseFloat(feature.properties.longitude);
-      map.setView([lat, lng], 11); // 13
+      map.setView([lat, lng], zoomTo);
     });
   }
 

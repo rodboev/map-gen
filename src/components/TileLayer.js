@@ -11,7 +11,7 @@ const TileLayer = () => {
       new L.TileLayer(
         `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${apiKey}`,
         {
-          maxZoom: 14,
+          maxZoom: 17,
           minZoom: 9,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
           id: 'mapbox/streets-v11',
@@ -19,7 +19,7 @@ const TileLayer = () => {
           zoomOffset: -1,
         }
       ).addTo(map);
-    }, [map, apiKey]);
+    }, [map]);
   
     return null
   }

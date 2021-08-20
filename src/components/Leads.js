@@ -2,7 +2,10 @@ import { useEffect, useReducer } from "react";
 import api from 'axios';
 import { v4 as id } from 'uuid';
 import { geosearch, formatPhoneNumber } from '../lib/utils';
-import { Marker, Popup } from "react-leaflet";
+import { useMap, Marker, Popup } from "react-leaflet";
+
+const maxPins = 50;
+const zoomTo = 14;
 
 const actionHandlers = {
   'ADD_LEAD': (leads, action) => {
@@ -36,7 +39,7 @@ const Leads = () => {
     (async () => {
       const response = await api.get('https://lead-gen-lite.herokuapp.com/api/all-with-contacts.json');
       
-      response.data.slice(0, 100).forEach(lead => {
+      response.data.slice(0, maxPins).forEach(lead => {
         const phone = formatPhoneNumber(lead.phone);
 
         dispatch({
@@ -86,9 +89,18 @@ const Leads = () => {
     })();
   }, [leads]);
 
+  const map = useMap();
+
   return leads.map(lead =>
     lead.position && lead.position.length > 0 &&
-      <Marker position={lead.position} key={lead.id}>
+      <Marker
+        position={lead.position}
+        eventHandlers={{
+          click: () => {
+            map.setView(lead.position, zoomTo);
+          },
+        }}
+        key={lead.id}>
         <Popup>
           <div>{lead.name}</div>
           <div>{lead.company}</div>
