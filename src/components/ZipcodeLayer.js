@@ -18,11 +18,10 @@ const ZipcodeLayer = ({ setLocation, setZoom }) => {
   const onEachFeature = (feature, layer) => {
     let popupContent = '';
     if (feature.properties) {
-      popupContent += `${feature.properties['PO_NAME']}, ${feature.properties['STATE']} ${feature.properties['postalCode']}`;
+      popupContent += `${feature.properties['PO_NAME']}, ${feature.properties['STATE']} ${feature.properties['postalCode']}`.toUpperCase();
     }
     layer.bindPopup(popupContent);
-    layer.bindTooltip(`${feature.properties['PO_NAME']}, ${feature.properties['STATE']} ${feature.properties['postalCode']}`);
-  
+
     layer.on('click', () => {
       const lat = parseFloat(feature.properties.latitude);
       const lng = parseFloat(feature.properties.longitude);

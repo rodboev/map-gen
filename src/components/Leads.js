@@ -1,8 +1,8 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import api from 'axios';
 import { v4 as id } from 'uuid';
 import { geosearch, formatPhoneNumber } from '../lib/utils';
-import { Marker, Popup, Tooltip } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 
 const leadReducer = (state, action) => {
   if (action.type === 'ADD_LEAD') {
@@ -46,6 +46,7 @@ const Leads = () => {
                 lead.zip
               ].filter(Boolean).join(' '),
             phone,
+            notes: [lead.date, lead.notes].filter(Boolean).join(': '),
             position: [],
             loading: false,
           }
@@ -80,21 +81,15 @@ const Leads = () => {
   const listAddresses = () => {
     return leads.map(lead =>
       lead.position && lead.position.length > 0 &&
-        <Marker position={lead.position}>
+        <Marker position={lead.position} key={lead.id}>
           <Popup>
-            <div>{lead.company}</div>
             <div>{lead.name}</div>
+            <div>{lead.company}</div>
             <div>{lead.address1}</div>
             <div>{lead.address2}</div>
             <div>{lead.phone}</div>
+            <p>{lead.notes}</p>
           </Popup>
-          <Tooltip>
-            <div>{lead.company}</div>
-            <div>{lead.name}</div>
-            <div>{lead.address1}</div>
-            <div>{lead.address2}</div>
-            <div>{lead.phone}</div>
-          </Tooltip>
         </Marker>
     )
   };

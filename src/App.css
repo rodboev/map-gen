@@ -3,6 +3,16 @@
   height: 420px;
 }
 
+.leaflet-popup-content  {
+  font: 8.5pt 'Open Sans';
+  margin: 12pt 14pt;
+}
+
+.leaflet-popup-content p {
+  width: 200px;
+  margin: 1.2em 0;
+}
+
 .addresses {
   font: 10pt source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
