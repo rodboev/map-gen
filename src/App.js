@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <div id="mapid">
-        <MapContainer center={[40.705, -73.978]} zoom={10} zoomControl={false}>
+        <MapContainer center={[40.705, -73.978]} zoom={10} zoomControl={true}>
           <TileLayer apiKey={apiKey} />
           <ZipcodeLayer />
           <Leads />

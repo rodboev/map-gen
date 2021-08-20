@@ -4,22 +4,28 @@ import { v4 as id } from 'uuid';
 import { geosearch, formatPhoneNumber } from '../lib/utils';
 import { Marker, Popup } from "react-leaflet";
 
-const leadReducer = (state, action) => {
-  if (action.type === 'ADD_LEAD') {
+const dispatchTable = {
+  'ADD_LEAD': (state, action) => {
     return [ ...state, action.payload ]
-  }
-  if (action.type === 'UPDATE_LEAD') {
-    const idx = state.findIndex(item => item.id === action.id);
-    const lead = {...state[idx]};
-    lead.position = action.position;
+  },
+  'UPDATE_LEAD': (state, action) => {
+    const idx = state.findIndex(item => item.id === action.payload.id);
+    const lead = {
+      ...state[idx], position: action.payload.position
+    };
     const leads = [...state];
     leads.splice(idx, 1, lead);
     return leads;
-  }
-  if (action.type === 'DELETE_LEAD') {
+  },
+  'DELETE_LEAD': (state, action) => {
     return state.filter(lead => lead.id !== action.payload.id)
   }
-  return state;
+};
+
+const leadReducer = (state, action) => {
+  return dispatchTable[action.type]
+    ? dispatchTable[action.type](state, action)
+    : state;
 }
 
 const Leads = () => {
@@ -71,35 +77,27 @@ const Leads = () => {
 
         dispatch({
           type: 'UPDATE_LEAD',
-          id: lead.id,
-          position: await queueGeosearch(),
+          payload: {
+            id: lead.id,
+            position: await queueGeosearch(),
+          }
         });
       });
     })();
   }, [leads]);
 
-  const listAddresses = () => {
-    return leads.map(lead =>
-      lead.position && lead.position.length > 0 &&
-        <Marker position={lead.position} key={lead.id}>
-          <Popup>
-            <div>{lead.name}</div>
-            <div>{lead.company}</div>
-            <div>{lead.address1}</div>
-            <div>{lead.address2}</div>
-            <div>{lead.phone}</div>
-            <p>{lead.notes}</p>
-          </Popup>
-        </Marker>
-    )
-  };
-
-  return (
-    <div className='addresses'>
-      {!leads && <div>Fetching addresses...</div>}
-      {leads && <div>Addresses found:</div>}
-      {leads && listAddresses()}
-    </div>
+  return leads.map(lead =>
+    lead.position && lead.position.length > 0 &&
+      <Marker position={lead.position} key={lead.id}>
+        <Popup>
+          <div>{lead.name}</div>
+          <div>{lead.company}</div>
+          <div>{lead.address1}</div>
+          <div>{lead.address2}</div>
+          <div>{lead.phone}</div>
+          <p>{lead.notes}</p>
+        </Popup>
+      </Marker>
   );
 }
 
