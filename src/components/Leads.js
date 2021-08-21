@@ -5,7 +5,7 @@ import { geosearch, formatPhoneNumber } from '../lib/utils';
 import { useMap, Marker, Popup } from "react-leaflet";
 
 const maxPins = 50;
-const zoomTo = 14;
+const zoomTo = 13;
 
 const actionHandlers = {
   'ADD_LEAD': (leads, action) => {
