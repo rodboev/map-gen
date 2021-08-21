@@ -9,7 +9,8 @@ import './App.css';
 import TileLayer from './components/TileLayer';
 import ZipcodeLayer from './components/ZipcodeLayer';
 import Leads from './components/LeadsLayer';
-import ZipcodeList from './components/ZipcodeList';
+import Filter from './components/Filter';
+import boros from './data/boros.json';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <ZipcodeLayer />
           <Leads />
         </MapContainer>
-        <ZipcodeList />
+        <Filter boros={boros}/>
       </div>
     </>
   );
