@@ -8,7 +8,8 @@ import './App.css';
 
 import TileLayer from './components/TileLayer';
 import ZipcodeLayer from './components/ZipcodeLayer';
-import Leads from './components/Leads';
+import Leads from './components/LeadsLayer';
+import ZipcodeList from './components/ZipcodeList';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <ZipcodeLayer />
           <Leads />
         </MapContainer>
+        <ZipcodeList />
       </div>
     </>
   );

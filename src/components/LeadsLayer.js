@@ -31,7 +31,7 @@ const reducer = (state, action) => {
     : state;
 }
 
-const Leads = () => {
+const LeadsLayer = () => {
   const [leads, dispatch] = useReducer(reducer, [])
 
   useEffect(() => {
@@ -113,4 +113,4 @@ const Leads = () => {
   );
 }
 
-export default Leads;
+export default LeadsLayer;
