@@ -31,7 +31,7 @@ const reducer = (state, action) => {
     : state;
 }
 
-const LeadsLayer = () => {
+const PinLayer = ({filter}) => {
   const [leads, dispatch] = useReducer(reducer, [])
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const LeadsLayer = () => {
   const map = useMap();
 
   return leads.map(lead =>
-    lead.position && lead.position.length > 0 &&
+    lead.position?.length > 0 &&
       <Marker
         position={lead.position}
         eventHandlers={{
@@ -113,4 +113,4 @@ const LeadsLayer = () => {
   );
 }
 
-export default LeadsLayer;
+export default PinLayer;

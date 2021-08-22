@@ -22,7 +22,7 @@ const StyledButton = styled.button`
   }
 `
 
-const Button = ({children, boros, currentBoros, setCurrentBoros}) => {
+const Button = ({children, boros, currentBoros, setCurrentBoros, filter, setFilter}) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -30,12 +30,30 @@ const Button = ({children, boros, currentBoros, setCurrentBoros}) => {
       className={ selected ? 'selected' : '' }
       onClick={() => {
         const isSelected = !selected;
+        let selectedBoros;
+
+        const getZips = selectedBoros => boros
+          .map(boro => selectedBoros.includes(boro.name) && boro.zips)
+          .filter(Boolean)
+          .flat()
 
         if (isSelected) {
-          setCurrentBoros(currentBoros.concat(boros.filter(x => x.name === children)[0].name))
+          selectedBoros = currentBoros.concat(boros.filter(x => x.name === children)[0].name)
+          setCurrentBoros(selectedBoros)
+          setFilter({
+            ...filter,
+            boros: selectedBoros,
+            zips: getZips(selectedBoros)
+          })
         }
         else {
-          setCurrentBoros(currentBoros.filter(currentBoro => currentBoro !== children))
+          selectedBoros = currentBoros.filter(currentBoro => currentBoro !== children)
+          setCurrentBoros(selectedBoros)
+          setFilter({
+            ...filter,
+            boros: selectedBoros,
+            zips: getZips(selectedBoros)
+          })
         }
       
         setSelected(isSelected)
@@ -46,33 +64,26 @@ const Button = ({children, boros, currentBoros, setCurrentBoros}) => {
   )
 }
 
-const Filter = ({ boros }) => {
+const Filter = ({ boros, filter, setFilter }) => {
   const [currentBoros, setCurrentBoros] = useState([]);
 
-    return (
-    <>
-      <p>
-        Filter:
-        { ' ' }
-        { boros.map(boro =>
-          <Button
-            boros={boros}
-            currentBoros={currentBoros}
-            setCurrentBoros={setCurrentBoros}
-          >
-              {boro.name}
-          </Button>
-        )}
-      </p>
-      { currentBoros.length > 0 &&
-        <p>
-          Selected boros:
-          { ' ' }
-          { currentBoros.join(', ') }
-        </p>
-      }
-    </>
-    )
+  return (
+    <p>
+      Filter:
+      { ' ' }
+      { boros.map(boro =>
+        <Button
+          boros={boros}
+          currentBoros={currentBoros}
+          setCurrentBoros={setCurrentBoros}
+          filter={filter}
+          setFilter={setFilter}
+        >
+            {boro.name}
+        </Button>
+      )}
+    </p>
+  )
 }
 
 export default Filter;
