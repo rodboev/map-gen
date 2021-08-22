@@ -13,7 +13,8 @@ import Filter from './components/Filter';
 import boros from './data/boros.json';
 
 function App() {
-  const [filter, setFilter] = useState({});
+  const [filter, setFilter] = useState({
+  });
 
   return (
     <>
@@ -31,7 +32,7 @@ function App() {
         filter={filter}
         setFilter={setFilter}
       />
-      {JSON.stringify(filter, null, 1)}
+      { /* JSON.stringify(filter, null, 1) */}
     </>
   );
 }
