@@ -94,7 +94,7 @@ const PinLayer = ({filter}) => {
   return leads.map(lead =>
     lead.position?.length > 0 &&
     (
-      filter.zips?.length === 0 ||
+      !filter.zips?.length ||
       filter.zips?.some(zip => lead.address2.includes(zip))
     ) &&
       <Marker

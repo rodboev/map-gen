@@ -14,6 +14,8 @@ import boros from './data/boros.json';
 
 function App() {
   const [filter, setFilter] = useState({
+    boros: [],
+    zips: []
   });
 
   return (
